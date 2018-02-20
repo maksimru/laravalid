@@ -63,11 +63,9 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * Opens form, set rules.
-     *
-     * @param array $rules Laravel validation rules
-     *
-     * @see Illuminate\Html\FormBuilder
+     * @param array $options
+     * @param null $rules
+     * @return \Illuminate\Support\HtmlString
      */
     public function open(array $options = [], $rules = null)
     {
@@ -83,11 +81,10 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * Create a new model based form builder.
-     *
-     * @param array $rules Laravel validation rules
-     *
-     * @see Illuminate\Html\FormBuilder
+     * @param mixed $model
+     * @param array $options
+     * @param null $rules
+     * @return \Illuminate\Support\HtmlString
      */
     public function model($model, array $options = [], $rules = null)
     {
@@ -97,7 +94,11 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * @see Illuminate\Html\FormBuilder
+     * @param string $type
+     * @param string $name
+     * @param null $value
+     * @param array $options
+     * @return \Illuminate\Support\HtmlString
      */
     public function input($type, $name, $value = null, $options = [])
     {
@@ -107,7 +108,10 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * @see Illuminate\Html\FormBuilder
+     * @param string $name
+     * @param null $value
+     * @param array $options
+     * @return \Illuminate\Support\HtmlString
      */
     public function textarea($name, $value = null, $options = [])
     {
@@ -117,16 +121,30 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * @see Illuminate\Html\FormBuilder
+     * @param string $name
+     * @param array $list
+     * @param null $selected
+     * @param array $selectAttributes
+     * @param array $optionsAttributes
+     * @param array $optgroupsAttributes
+     * @return \Illuminate\Support\HtmlString
      */
-    public function select($name, $list = [], $selected = null, array $selectAttributes = [], array $optionsAttributes = [])
+    public function select($name, $list = [], $selected = null, array $selectAttributes = [], array $optionsAttributes = [], array $optgroupsAttributes = [])
     {
         $optionsAttributes = $this->converter->convert(Helper::getFormAttribute($name)) + $optionsAttributes;
         $selectAttributes = $this->converter->convert(Helper::getFormAttribute($name)) + $selectAttributes;
 
-        return parent::select($name, $list, $selected, $selectAttributes, $optionsAttributes);
+        return parent::select($name, $list, $selected, $selectAttributes, $optionsAttributes, $optgroupsAttributes);
     }
 
+    /**
+     * @param string $type
+     * @param string $name
+     * @param mixed $value
+     * @param bool $checked
+     * @param array $options
+     * @return \Illuminate\Support\HtmlString
+     */
     protected function checkable($type, $name, $value, $checked, $options)
     {
         $options = $this->converter->convert(Helper::getFormAttribute($name)) + $options;
@@ -135,9 +153,7 @@ class FormBuilder extends \Collective\Html\FormBuilder
     }
 
     /**
-     * Closes form and reset $this->rules.
-     * 
-     * @see Illuminate\Html\FormBuilder
+     * @return string
      */
     public function close()
     {
